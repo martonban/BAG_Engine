@@ -24,7 +24,7 @@ class Player{
         Texture2D texture;
         PlayerRec playerRec;
         Vector2 origin;
-        int gridX, gridY, needGridX, needGridY;
+        int gridX, gridY, needGridX, needGridY, rotation;
 };
 
 
