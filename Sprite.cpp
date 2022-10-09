@@ -1,34 +1,31 @@
-#include "Scene.h"
+#include "Sprite.h"
 #include "raylib.h"
+#include "raymath.h"
 #include <iostream>
 
-void Sprite::initSprite(const char* textureURL, Vector2 grid, float scale){
-    texture = {LoadTexture(textureURL)};
-    texture.width *=scale;
-    texture.height *=scale;
-    gridX = grid.x;
-    gridY = grid.y;
+void Sprite::initSprite(Vector2 startPos){
+    currentPos = startPos;
 }
 
 
-void Sprite::initSprite(const char* textureURL, Vector2 grid, float scale, Vector2 useGrid){
-    texture = {LoadTexture(textureURL)};
-    texture.width *=scale;
-    texture.height *=scale;
-    gridX = grid.x;
-    gridY = grid.y;
-    needGridX = useGrid.x;
-    needGridY = useGrid.y;
+Vector2 Sprite::getPos(){
+    return currentPos;
 }
 
-void Sprite::drawGrid(Vector2 pos){
-        SpriteRec sprite; 
-        sprite.rec.width = texture.width/gridX;
-        sprite.rec.height = texture.height/gridY;
-        sprite.pos.x = pos.x;
-        sprite.pos.y = pos.y;
 
-        DrawTextureRec(texture, sprite.rec, sprite.pos, WHITE);
+void Sprite::spriteTick(){
+   
+    float scale = 0.3;
+    // Define Origin
+    origin = {((float)texture.width*scale)/2, ((float)texture.height*scale)/2};
+    // GridX, gridY
+    gridX = 1.0f;
+    gridY = 1.0f;
+
+    Vector2 changePos = {0.0f, 0.0f};
+
+    Rectangle sourceRec = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
+    Rectangle destRec = { currentPos.x, currentPos.y, texture.width*scale, texture.height*scale };
+    DrawTexturePro(texture, sourceRec, destRec, origin, rotation, WHITE);
 }
-
 

@@ -1,27 +1,28 @@
 #include "raylib.h"
-#include <iostream>
+#include "raymath.h"
+
 
 #ifndef SPRITE_H
 #define SPRITE_H
 
 class Sprite{
-    public:
         /*
             Grid = oneGrid.x/spritseehtImageLength.x and oneGrid.y/spritseehtImageLength.y
             useGrid = Grid Pos in the spritseet.
         */
-        void initSprite(const char* textureURL, Vector2 grid, float scale);
-        void initSprite(const char* textureURL, Vector2 grid, float scale, Vector2 useGrid);
+    public:
+        void initSprite(Vector2 startPos);
         void changeGrid(Vector2 grid);
-        void drawGrid(Vector2 pos);
+        Vector2 getPos();
+        void spriteTick();
+        Texture2D texture = {LoadTexture("Assets/cuteCharacter.png")};
     private:
-        Texture2D texture;
+        Vector2 origin;
+        Vector2 currentPos;
+        float scale;
+        int rotation = 0;
         int gridX, gridY, needGridX, needGridY;
-        struct SpriteRec
-        {
-            Rectangle rec;
-            Vector2 pos; 
-        };
-
 };
+
+
 #endif
