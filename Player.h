@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "raymath.h"
 
 
 #ifndef PLAYER_H
@@ -10,21 +11,17 @@ class Player{
             useGrid = Grid Pos in the spritseet.
         */
     public:
-        void initPlayer(const char* textureURL, float scale);
+        void initPlayer(Vector2 startPos);
         void changeGrid(Vector2 grid);
+        Vector2 getPos();
         void playerTick();
-        struct PlayerRec{
-            // Pos 
-            Rectangle destRec;
-            Rectangle sourceRec;
-            Vector2 pos;
-        };
-        
+        Texture2D texture = {LoadTexture("###########")};
     private:
-        Texture2D texture;
-        PlayerRec playerRec;
         Vector2 origin;
-        int gridX, gridY, needGridX, needGridY, rotation;
+        Vector2 currentPos;
+        float scale;
+        int rotation = 0;
+        int gridX, gridY, needGridX, needGridY;
 };
 
 
