@@ -4,5 +4,5 @@ using namespace std;
 #include "raylib.h"
 
 void Renderer::rendererInit(){
-    printf("LUMETRON ENGINE: RENDERER IS SET UP SUCCESSFULLY\n");
+    printf("BAG ENGINE: RENDERER IS SET UP SUCCESSFULLY\n");
 }
