@@ -1,6 +1,6 @@
 #include "raylib.h"
 #include "Sprite.h"
-
+#include "UserInterface.h"
 
 int main(void)
 {
@@ -9,17 +9,15 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "UI");
 
-    Sprite player;
-    player.initSprite({500.0f, 500.0f});
+    Sprite sprite;
+    sprite.initSprite("Assets/arrow.png",{500.0f, 500.0f}, {2,1});
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) 
     {
         BeginDrawing();
-
             ClearBackground(RAYWHITE);
-            DrawText("Congrats! You created your first window!", 500, 500, 20, LIGHTGRAY);
-            player.spriteTick();
+            sprite.spriteTick();
         EndDrawing();
     }
 
