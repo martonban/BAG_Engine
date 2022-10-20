@@ -1,6 +1,5 @@
 #include "raylib.h"
 #include "Sprite.h"
-#include "UserInterface.h"
 
 int main(void)
 {
