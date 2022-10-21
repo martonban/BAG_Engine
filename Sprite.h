@@ -13,12 +13,8 @@ class Sprite{
     public:
         void initSprite(const char* textureURL, Vector2 startPos);
         void initSprite(const char* textureURL, Vector2 startPos, Vector2 specailOrigin);
-        
-        void changeGrid(Vector2 grid);
         Vector2 getPos();
-        Vector2 getOrigin();
         void spriteTick();
-        void setOrigin(Vector2 origin);
     private:
         Texture2D texture;
         Vector2 origin;
