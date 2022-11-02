@@ -25,6 +25,8 @@ void Sprite::spriteTick(){
    
     float scale = 0.3;
     rotation++;
+    if(originRatio.x == 0) originRatio.x = (float)texture.width*scale;
+    if(originRatio.y == 0) originRatio.y = (float)texture.height*scale;
     Vector2 currentOrigin = {((float)texture.width*scale)/originRatio.x, ((float)texture.height*scale)/originRatio.y};
     Vector2 changePos = {0.0f, 0.0f};
     Rectangle sourceRec = {0.0f, 0.0f, (float)texture.width, (float)texture.height};
