@@ -94,7 +94,6 @@ ifeq ($(PLATFORM),PLATFORM_RPI)
 endif
 
 ifeq ($(PLATFORM),PLATFORM_WEB)
-    # Emscripten required variables
     EMSDK_PATH          ?= C:/emsdk
     EMSCRIPTEN_VERSION  ?= 1.38.31
     CLANG_VERSION       = e$(EMSCRIPTEN_VERSION)_64bit
@@ -113,18 +112,14 @@ CC = g++
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),OSX)
-        # OSX default compiler
         CC = clang++
     endif
     ifeq ($(PLATFORM_OS),BSD)
-        # FreeBSD, OpenBSD, NetBSD, DragonFly default compiler
         CC = clang
     endif
 endif
 ifeq ($(PLATFORM),PLATFORM_RPI)
     ifeq ($(USE_RPI_CROSS_COMPILER),TRUE)
-        # Define RPI cross-compiler
-        #CC = armv6j-hardfloat-linux-gnueabi-gcc
         CC = $(RPI_TOOLCHAIN)/bin/arm-linux-gnueabihf-gcc
     endif
 endif
@@ -161,7 +156,6 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
             CFLAGS += -D_DEFAULT_SOURCE
         endif
         ifeq ($(RAYLIB_LIBTYPE),SHARED)
-            # Explicitly enable runtime link to libraylib.so
             CFLAGS += -Wl,-rpath,$(EXAMPLE_RUNTIME_PATH)
         endif
     endif
@@ -176,7 +170,6 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
         CFLAGS += -s ASSERTIONS=1 --profiling
     endif
 
-    # Define a custom shell .html and output extension
     CFLAGS += --shell-file $(RAYLIB_PATH)/src/shell.html
     EXT = .html
 endif
@@ -186,26 +179,20 @@ ifneq ($(wildcard /opt/homebrew/include/.*),)
     INCLUDE_PATHS += -I/opt/homebrew/include
 endif
 
-# Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_RPI)
-    # RPI required libraries
     INCLUDE_PATHS += -I/opt/vc/include
     INCLUDE_PATHS += -I/opt/vc/include/interface/vmcs_host/linux
     INCLUDE_PATHS += -I/opt/vc/include/interface/vcos/pthreads
 endif
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),BSD)
-        # Consider -L$(RAYLIB_H_INSTALL_PATH)
         INCLUDE_PATHS += -I/usr/local/include
     endif
     ifeq ($(PLATFORM_OS),LINUX)
-        # Reset everything.
-        # Precedence: immediately local, installed version, raysan5 provided libs -I$(RAYLIB_H_INSTALL_PATH) -I$(RAYLIB_PATH)/release/include
         INCLUDE_PATHS = -I$(RAYLIB_H_INSTALL_PATH) -isystem. -isystem$(RAYLIB_PATH)/src -isystem$(RAYLIB_PATH)/release/include -isystem$(RAYLIB_PATH)/src/external
     endif
 endif
 
-# Define library paths containing required libs.
 LDFLAGS = -L.
 
 ifneq ($(wildcard $(RAYLIB_RELEASE_PATH)/.*),)
@@ -220,12 +207,9 @@ endif
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),BSD)
-        # Consider -L$(RAYLIB_INSTALL_PATH)
         LDFLAGS += -L. -Lsrc -L/usr/local/lib
     endif
     ifeq ($(PLATFORM_OS),LINUX)
-        # Reset everything.
-        # Precedence: immediately local, installed version, raysan5 provided libs
         LDFLAGS = -L. -L$(RAYLIB_INSTALL_PATH) -L$(RAYLIB_RELEASE_PATH)
     endif
 endif
@@ -234,75 +218,52 @@ ifeq ($(PLATFORM),PLATFORM_RPI)
     LDFLAGS += -L/opt/vc/lib
 endif
 
-# Define any libraries required on linking
-# if you want to link libraries (libname.so or libname.a), use the -lname
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
-        # Libraries for Windows desktop compilation
-        # NOTE: WinMM library required to set high-res timer resolution
         LDLIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
-        # Required for physac examples
-        #LDLIBS += -static -lpthread
     endif
     ifeq ($(PLATFORM_OS),LINUX)
-        # Libraries for Debian GNU/Linux desktop compiling
-        # NOTE: Required packages: libegl1-mesa-dev
         LDLIBS = -lraylib -lGL -lm -lpthread -ldl -lrt
         
-        # On X11 requires also below libraries
         LDLIBS += -lX11
 
-        
-        # On Wayland windowing system, additional libraries requires
+    
         ifeq ($(USE_WAYLAND_DISPLAY),TRUE)
             LDLIBS += -lwayland-client -lwayland-cursor -lwayland-egl -lxkbcommon
         endif
-        # Explicit link to libc
         ifeq ($(RAYLIB_LIBTYPE),SHARED)
             LDLIBS += -lc
         endif
     endif
     ifeq ($(PLATFORM_OS),OSX)
-        # Libraries for OSX 10.9 desktop compiling
-        # NOTE: Required packages: libopenal-dev libegl1-mesa-dev
         LDLIBS = -lraylib -framework OpenGL -framework OpenAL -framework Cocoa -framework IOKit
     endif
     ifeq ($(PLATFORM_OS),BSD)
-        # Libraries for FreeBSD, OpenBSD, NetBSD, DragonFly desktop compiling
-        # NOTE: Required packages: mesa-libs
         LDLIBS = -lraylib -lGL -lpthread -lm
 
-        # On XWindow requires also below libraries
         LDLIBS += -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor
     endif
     ifeq ($(USE_EXTERNAL_GLFW),TRUE)
-        # NOTE: It could require additional packages installed: libglfw3-dev
         LDLIBS += -lglfw
     endif
 endif
 ifeq ($(PLATFORM),PLATFORM_RPI)
-    # Libraries for Raspberry Pi compiling
-    # NOTE: Required packages: libasound2-dev (ALSA)
     LDLIBS = -lraylib -lbrcmGLESv2 -lbrcmEGL -lpthread -lrt -lm -lbcm_host -ldl
 endif
 ifeq ($(PLATFORM),PLATFORM_WEB)
-    # Libraries for web (HTML5) compiling
     LDLIBS = $(RAYLIB_RELEASE_PATH)/libraylib.bc
 endif
 
-# Define a recursive wildcard function
+
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
-# Define all source files required
 SRC_DIR = src
 OBJ_DIR = obj
 
-# Define all object files from source files
 SRC = $(call rwildcard, *.c, *.h)
-#OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
 OBJS ?= main.c
 
-# For Android platform we call a custom Makefile.Android
 ifeq ($(PLATFORM),PLATFORM_ANDROID)
     MAKEFILE_PARAMS = -f Makefile.Android 
     export PROJECT_NAME
@@ -311,22 +272,16 @@ else
     MAKEFILE_PARAMS = $(PROJECT_NAME)
 endif
 
-# Default target entry
-# NOTE: We call this Makefile target or Makefile.Android target
 all:
 	$(MAKE) $(MAKEFILE_PARAMS)
 
-# Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
 	$(CC) -o $(PROJECT_NAME)$(EXT) $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 
-# Compile source files
-# NOTE: This pattern will compile every module defined on $(OBJS)
-#%.o: %.c
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
 
-# Clean everything
 clean:
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
