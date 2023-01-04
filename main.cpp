@@ -3,13 +3,15 @@
 
 int main(void)
 {
+
     const int screenWidth = 1000;
     const int screenHeight = 1000;
 
     InitWindow(screenWidth, screenHeight, "UI");
-
     Sprite sprite;
-    sprite.initSprite("Assets/arrow.png",{500.0f, 500.0f}, {2,1});
+    sprite.initSprite("Assets/demosheet.png", {400.0f, 300.0f}, {32.0f, 32.0f}, {0.0f, 0.f});
+
+
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) 
