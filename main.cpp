@@ -9,7 +9,6 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "UI");
     Sprite sprite;
-    sprite.initSprite("Assets/demosheet.png", {400.0f, 300.0f}, {32.0f, 32.0f}, {0.0f, 0.f});
 
 
 
@@ -19,6 +18,7 @@ int main(void)
         BeginDrawing();
             ClearBackground(RAYWHITE);
             sprite.spriteTick();
+
         EndDrawing();
     }
 

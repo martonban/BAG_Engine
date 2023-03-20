@@ -13,7 +13,6 @@
             void initSprite(const char* textureURL, Vector2 startPos, Vector2 specailOrigin);
             void initSprite(const char* textureURL, Vector2 startPos, Vector2 oneSpriteSize, Vector2 givenSheetPos);
             void initSprite(const char* textureURL, Vector2 startPos, Vector2 oneSpriteSize, Vector2 sheetPos, Vector2 specailOrigin);
-            Vector2 getPos();
             void spriteTick();
         private:
             Texture2D texture;
@@ -22,7 +21,7 @@
             Vector2 originRatio;
             Vector2 spriteSize; 
             Vector2 sheetPos;
-            float scale;
+            //float scale;
             int rotation = 0;
     };
 
