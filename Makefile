@@ -20,9 +20,7 @@
 #     3. This notice may not be removed or altered from any source distribution.
 #
 #**************************************************************************************************
-
 .PHONY: all clean
-
 
 PROJECT_NAME       ?= game
 RAYLIB_VERSION     ?= 3.0.0
@@ -30,7 +28,6 @@ RAYLIB_API_VERSION ?= 300
 RAYLIB_PATH        ?= ..\..
 
 COMPILER_PATH      ?= C:/raylib/w64devkit/bin
-
 
 PLATFORM           ?= PLATFORM_DESKTOP
 
@@ -42,7 +39,6 @@ RAYLIB_H_INSTALL_PATH ?= $(DESTDIR)/include
 RAYLIB_LIBTYPE        ?= STATIC
 
 BUILD_MODE            ?= RELEASE
-
 
 USE_EXTERNAL_GLFW     ?= FALSE
 
@@ -303,4 +299,3 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
 	del *.o *.html *.js
 endif
 	@echo Cleaning done
-

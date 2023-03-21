@@ -4,11 +4,12 @@
 int main(void)
 {
 
-    const int screenWidth = 1000;
-    const int screenHeight = 1000;
+    const int screenWidth = 1920;
+    const int screenHeight = 1080;
 
     InitWindow(screenWidth, screenHeight, "UI");
     Sprite sprite;
+    sprite.initSprite("Assets/demosheet.png", {0.f, 0.f});
 
 
 
@@ -17,6 +18,7 @@ int main(void)
     {
         BeginDrawing();
             ClearBackground(RAYWHITE);
+
             sprite.spriteTick();
 
         EndDrawing();
